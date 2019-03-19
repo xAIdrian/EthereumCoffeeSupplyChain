@@ -69,7 +69,7 @@ contract SupplyChain is RetailerRole, ConsumerRole {
 
     // Define a modifer that checks to see if msg.sender == owner of the contract
     modifier onlyOwner() {
-        require(msg.sender == owner);
+        require(msg.sender == owner, "Not Owner");
         _;
     }
 
@@ -95,49 +95,49 @@ contract SupplyChain is RetailerRole, ConsumerRole {
 
     // Define a modifier that checks if an item.state of a upc is Harvested
     modifier harvested(uint _upc) {
-        require(items[_upc].itemState == State.Harvested);
+        require(items[_upc].itemState == State.Harvested, "Not Harvested");
         _;
     }
 
     // Define a modifier that checks if an item.state of a upc is Processed
     modifier processed(uint _upc) {
-        require(items[_upc].itemState == State.Processed);
+        require(items[_upc].itemState == State.Processed, "Not Processed");
         _;
     }
     
     // Define a modifier that checks if an item.state of a upc is Packed
     modifier packed(uint _upc) {
-        require(items[_upc].itemState == State.Packed);
+        require(items[_upc].itemState == State.Packed, "Not Packed");
         _;
     }
 
     // Define a modifier that checks if an item.state of a upc is ForSale
     modifier forSale(uint _upc) {
-        require(items[_upc].itemState == State.ForSale);
+        require(items[_upc].itemState == State.ForSale, "Not ForSale");
         _;
     }
 
     // Define a modifier that checks if an item.state of a upc is Sold
     modifier sold(uint _upc) {
-        require(items[_upc].itemState == State.Sold);
+        require(items[_upc].itemState == State.Sold, "Not Sold");
         _;
     }
     
     // Define a modifier that checks if an item.state of a upc is Shipped
     modifier shipped(uint _upc) {
-        require(items[_upc].itemState == State.Shipped);
+        require(items[_upc].itemState == State.Shipped, "Not Shipped");
         _;
     }
 
     // Define a modifier that checks if an item.state of a upc is Received
     modifier received(uint _upc) {
-        require(items[_upc].itemState == State.Received);
+        require(items[_upc].itemState == State.Received, "Not Received");
         _;
     }
 
     // Define a modifier that checks if an item.state of a upc is Purchased
     modifier purchased(uint _upc) {
-        require(items[_upc].itemState == State.Purchased);
+        require(items[_upc].itemState == State.Purchased, "Not Purchased");
         _;
     }
 
@@ -179,8 +179,8 @@ contract SupplyChain is RetailerRole, ConsumerRole {
             _originFarmLongitude,
             _upc + sku,
             _productNotes,
-            0.0,
-            State.Harvested,
+            0,
+            defaultState,
             address(0),
             address(0),
             address(0)
@@ -249,7 +249,7 @@ contract SupplyChain is RetailerRole, ConsumerRole {
         items[_upc].distributorID = msg.sender; 
         items[_upc].itemState = State.Sold;
         
-        // Transfer money to farmer
+        // // Transfer money to farmer
         items[_upc].originFarmerID.transfer(items[_upc].productPrice);
         
         // emit the appropriate event
