@@ -276,7 +276,7 @@ contract SupplyChain is RetailerRole, ConsumerRole {
       // Call modifier to check if upc has passed previous supply chain stage
       shipped(_upc)
       // Access Control List enforced by calling Smart Contract / DApp
-      onlyRetailer()
+      //onlyRetailer()
       {
         // Update the appropriate fields - ownerID, retailerID, itemState
         items[_upc].ownerID = msg.sender;
