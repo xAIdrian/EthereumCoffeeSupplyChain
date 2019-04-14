@@ -73,6 +73,11 @@ contract SupplyChain is RetailerRole, ConsumerRole {
         _;
     }
 
+    modifier onlyConsumer() {
+        isConsumer(msg.sender);
+        _;
+    }
+
     // Define a modifer that verifies the Caller
     modifier verifyCaller (address _address) {
         require(msg.sender == _address, "Caller is not verified"); 
@@ -289,7 +294,7 @@ contract SupplyChain is RetailerRole, ConsumerRole {
 
     // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
     // Use the above modifiers to check if the item is received
-    function purchaseItem(uint _upc) public
+    function purchaseItem(uint _upc) public payable
       // Call modifier to check if upc has passed previous supply chain stage
       received(_upc)
       // Access Control List enforced by calling Smart Contract / DApp
@@ -300,7 +305,7 @@ contract SupplyChain is RetailerRole, ConsumerRole {
         items[_upc].consumerID = msg.sender;
         items[_upc].itemState = State.Purchased;
         // Emit the appropriate event
-        emit Purchased(_upc); 
+        emit Purchased(_upc);
     }
 
     // Define a function 'fetchItemBufferOne' that fetches the data

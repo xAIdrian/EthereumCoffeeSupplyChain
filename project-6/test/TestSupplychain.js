@@ -168,7 +168,7 @@ contract('SupplyChain', function(accounts) {
         assert.equal(resultBufferTwo[6], distributorID, 'Error: Missing or Invalid DistributorID')
         assert.equal(resultBufferTwo[5], 4, 'Error: Invalid item State')
         //transfer
-        /*web3.eth.getBalance(resultBufferOne[3]).then(function(actual) {
+        /*TODO web3.eth.getBalance(resultBufferOne[3]).then(function(actual) {
             assert.deepEqual(actual, 1, "Balance incorrect!")
           })*/
 
@@ -241,8 +241,7 @@ contract('SupplyChain', function(accounts) {
         })
 
         // Mark an item as Purchased by calling function purchaseItem()
-        await supplyChain.purchaseItem(upc, { from: consumerID, value: web3.utils.toWei("3", "ether") })
-        //await supplyChain.buyItem(upc, { from: distributorID, value: web3.utils.toWei("3", "ether") });
+        await supplyChain.purchaseItem(upc, { from: consumerID })
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
@@ -253,7 +252,7 @@ contract('SupplyChain', function(accounts) {
         assert.equal(resultBufferOne[2], consumerID, 'Error: Missing or Invalid OwnerID')
         assert.equal(resultBufferTwo[8], consumerID, 'Error: Missing or Invalid ConsumerID')
         assert.equal(resultBufferTwo[5], 7, 'Error: Invalid item State')
-        assert.equal(eventEmitted, true, 'Invalid event emitted') 
+        assert.equal(eventEmitted, true, 'Invalid event emitted')
     })    
 
     // 9th Test
