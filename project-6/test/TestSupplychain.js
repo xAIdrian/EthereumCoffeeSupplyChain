@@ -23,11 +23,11 @@ contract('SupplyChain', function(accounts) {
 
     ///Available Accounts
     ///==================
-    ///(0) 0x27d8d15cbc94527cadf5ec14b69519ae23288b95
-    ///(1) 0x018c2dabef4904ecbd7118350a0c54dbeae3549a
-    ///(2) 0xce5144391b4ab80668965f2cc4f2cc102380ef0a
-    ///(3) 0x460c31107dd048e34971e57da2f99f659add4f02
-    ///(4) 0xd37b7b8c62be2fdde8daa9816483aebdbd356088
+    ///(0) owner - 0x27d8d15cbc94527cadf5ec14b69519ae23288b95
+    ///(1) origin - 0x018c2dabef4904ecbd7118350a0c54dbeae3549a
+    ///(2) distributor - 0xce5144391b4ab80668965f2cc4f2cc102380ef0a
+    ///(3) retailer - 0x460c31107dd048e34971e57da2f99f659add4f02
+    ///(4) consumer - 0xd37b7b8c62be2fdde8daa9816483aebdbd356088
     ///(5) 0x27f184bdc0e7a931b507ddd689d76dba10514bcb
     ///(6) 0xfe0df793060c49edca5ac9c104dd8e3375349978
     ///(7) 0xbd58a85c96cc6727859d853086fe8560bc137632
@@ -201,13 +201,6 @@ contract('SupplyChain', function(accounts) {
     // 7th Test
     it("Testing smart contract function receiveItem() that allows a retailer to mark coffee received", async() => {
         const supplyChain = await SupplyChain.deployed()
-
-        console.log("...EMBRACE THE BEAST...")
-        console.log("Contract Owner: accounts[0] ", ownerID)
-        console.log("Farmer: accounts[1] ", originFarmerID)
-        console.log("Distributor: accounts[2] ", distributorID)
-        console.log("Retailer: accounts[3] ", retailerID)
-        console.log("Consumer: accounts[4] ", consumerID)
         
         // Declare and Initialize a variable for event
         var eventEmitted = false
@@ -230,8 +223,8 @@ contract('SupplyChain', function(accounts) {
         // Verify the result set
 
         assert.equal(resultBufferOne[2], retailerID, 'Error: Missing or Invalid OwnerID')
-        assert.equal(resultBufferTwo[6], retailerID, 'Error: Missing or Invalid RetailerID')
-        assert.equal(resultBufferTwo[5], 4, 'Error: Invalid item State')
+        assert.equal(resultBufferTwo[7], retailerID, 'Error: Missing or Invalid RetailerID')
+        assert.equal(resultBufferTwo[5], 6, 'Error: Invalid item State')
         assert.equal(eventEmitted, true, 'Invalid event emitted') 
     })    
 
@@ -248,7 +241,8 @@ contract('SupplyChain', function(accounts) {
         })
 
         // Mark an item as Purchased by calling function purchaseItem()
-        await supplyChain.purchaseItem(upc)
+        await supplyChain.purchaseItem(upc, { from: consumerID, value: web3.utils.toWei("3", "ether") })
+        //await supplyChain.buyItem(upc, { from: distributorID, value: web3.utils.toWei("3", "ether") });
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
@@ -257,8 +251,8 @@ contract('SupplyChain', function(accounts) {
         // Verify the result set
 
         assert.equal(resultBufferOne[2], consumerID, 'Error: Missing or Invalid OwnerID')
-        assert.equal(resultBufferTwo[6], consumerID, 'Error: Missing or Invalid ConsumerID')
-        assert.equal(resultBufferTwo[5], 4, 'Error: Invalid item State')
+        assert.equal(resultBufferTwo[8], consumerID, 'Error: Missing or Invalid ConsumerID')
+        assert.equal(resultBufferTwo[5], 7, 'Error: Invalid item State')
         assert.equal(eventEmitted, true, 'Invalid event emitted') 
     })    
 
